@@ -1,4 +1,6 @@
-DB = activities
+FLASK_APP = app.py
+FLASK_DEBUG = True
+DB = cats_dev
 DB_USER = your-user-here
 DB_PASSWORD = your-password-here
 DB_HOST = mongodb+srv://your-cloud-mongo-host-here
