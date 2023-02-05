@@ -20,6 +20,7 @@ connect(
     username=mongo_user,
     password=mongo_password,
     retryWrites=False,
+    uuidRepresentation='standard',
 )
 
 
@@ -47,4 +48,4 @@ def create_cat():
     return_cat = cat.to_mongo().to_dict()
     return_cat["id"] = str(cat.id)
     return_cat.pop("_id")
-    return return_cat
+    return return_cat, 201
