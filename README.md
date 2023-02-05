@@ -1,4 +1,4 @@
-# mongodb-test-client
+# Testing a Flask and Mongoengine app with Pytest
 
 A very simple Python Flask client for MongoDB using mongoengine, with a demonstration of how to use Pytest to test Flask routes.
 
