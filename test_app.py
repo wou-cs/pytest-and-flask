@@ -37,5 +37,12 @@ def test_create_through_client(client):
 def test_index_returns_empty_dictionary():
     assert get_index() == {}
 
-def test_create_is_sassy():
-    assert create_cat()[0]["style"] == "Sassy"
+def test_can_retrieve_a_cat_that_is_saved(client):
+    response = client.get(url_for("create_cat"))
+    assert response.status_code == 201
+    d = json.loads(response.data)
+    assert d["style"] == "Sassy"
+    # now retrieve the same cat
+    response = client.get(url_for("get_cat", cat_id=d["id"]))
+    d2 = json.loads(response.data)
+    assert d2["style"] == d["style"]

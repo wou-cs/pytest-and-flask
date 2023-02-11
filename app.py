@@ -1,5 +1,5 @@
 import datetime, os
-from flask import Flask
+from flask import Flask, abort
 from mongoengine import DateTimeField, Document, IntField, StringField, connect
 from dotenv import load_dotenv
 
@@ -30,6 +30,11 @@ class CatBreed(Document):
     sub_species_count = IntField()
     last_updated = DateTimeField()
 
+def fix_mongo_id(mongo_object):
+    d = mongo_object.to_mongo().to_dict()
+    d["id"] = str(mongo_object.id)
+    d.pop("_id", None)
+    return d
 
 @app.route("/", methods=["GET"])
 def get_index():
@@ -45,7 +50,11 @@ def create_cat():
         sub_species_count=5,
     )
     cat.save()
-    return_cat = cat.to_mongo().to_dict()
-    return_cat["id"] = str(cat.id)
-    return_cat.pop("_id")
-    return return_cat, 201
+    return fix_mongo_id(cat), 201
+
+@app.route("/get/<string:cat_id>", methods=["GET"])
+def get_cat(cat_id):
+    return_cat = CatBreed.objects.get(id=cat_id)
+    if return_cat is None:
+        abort(404)
+    return fix_mongo_id(return_cat)
